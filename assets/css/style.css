@@ -1,0 +1,16 @@
+
+body{font-family:Pretendard, sans-serif;background:#f4f6fb;margin:0;}
+header{text-align:center;padding:30px;font-size:26px;font-weight:700;}
+.description{background:#eef2ff;padding:20px;margin:20px;border-radius:12px;}
+.controls{text-align:center;margin:20px;}
+select,input,button{padding:10px;margin:5px;border-radius:8px;border:1px solid #ddd;}
+.cards{display:flex;justify-content:center;gap:20px;margin:20px;flex-wrap:wrap;}
+.card{background:white;padding:20px;border-radius:16px;width:220px;
+box-shadow:0 6px 18px rgba(0,0,0,0.08);font-size:20px;font-weight:600;}
+.section{background:white;margin:25px auto;padding:25px;width:95%;max-width:1200px;border-radius:16px;
+box-shadow:0 6px 18px rgba(0,0,0,0.08);}
+table{width:100%;border-collapse:collapse;}
+th,td{padding:10px;border-bottom:1px solid #eee;text-align:center;}
+.up{color:#2563eb;font-weight:700;}
+.down{color:#dc2626;font-weight:700;}
+.same{color:#6b7280;}

@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>입시결과 Ultimate 10.0</title>
+<link href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+</head>
+<body>
+
+<header>📊 입시결과 통합 분석 플랫폼 (Ultimate 10.0)</header>
+
+<section class="description">
+<h3>📌 데이터 출처</h3>
+<p>본 자료는 2023~2025학년도 어디가 공개 입시결과(70%cut 기준)를 기반으로 구성되었습니다.</p>
+
+<h3>📌 등급 변환 방식</h3>
+<p>5등급 평균을 입력하면 부산 9등급, 대진대 9등급(평균), 50:50 통합값으로 환산합니다.</p>
+
+<h3>📌 사용 방법</h3>
+<p>① 대학 선택 → ② 전형 선택 → ③ 5등급 입력 → ④ 박스/레일/표 분석</p>
+</section>
+
+<div class="controls">
+<select id="univ"></select>
+<select id="type"></select>
+<input type="number" id="grade5" step="0.05" placeholder="5등급 평균 입력">
+<button onclick="convert()">변환</button>
+</div>
+
+<div class="cards">
+<div class="card" id="busan">부산 9등급</div>
+<div class="card" id="daejin">대진대 9등급</div>
+<div class="card" id="mix">50:50 통합</div>
+</div>
+
+<div class="section">
+<h2>📊 전문 통계형 박스플롯</h2>
+<canvas id="boxChart"></canvas>
+</div>
+
+<div class="section">
+<h2>🚄 레일 산포도 (상·중·하 라벨 표시)</h2>
+<canvas id="railChart"></canvas>
+</div>
+
+<div class="section">
+<h2>📋 데이터 표</h2>
+<div id="table"></div>
+</div>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
