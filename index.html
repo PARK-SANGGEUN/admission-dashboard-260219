@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>모두의 2028대입 어디가 입결 변환</title>
+<link rel="stylesheet" href="style.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script defer src="conversionData.js"></script>
+<script defer src="admissionData.js"></script>
+<script defer src="script.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<h1 class="title">모두의 2028대입 어디가 입결 변환</h1>
+<div class="sub">Copyright @All Teachers</div>
+
+<div class="notice">
+<b>해석 안내</b><br/>
+수염상자: 전형 내 전체 모집단위 70%cut 분포 (중앙값 기준).<br/>
+빨간선: 입력 5등급 → 9등급 환산 위치.<br/>
+산포도: 3개년 전체 모집단위 가로 레일 분포.
+</div>
+
+<div class="input-box">
+<label>5등급 평균 입력</label><br/>
+<input id="grade5" type="number" step="0.01" min="1" max="5"/>
+<div class="cards">
+<div class="card blue"><div>부산교육청 기준</div><div id="v-busan" class="num">-</div></div>
+<div class="card green"><div>대진대학교 기준</div><div id="v-daejin" class="num">-</div></div>
+<div class="card indigo"><div>50:50 통합</div><div id="v-combined" class="num">-</div></div>
+</div>
+</div>
+
+<div class="chart-box">
+<h3>전형별 모집단위 가로형 산포도 레일</h3>
+<canvas id="railChart" height="280"></canvas>
+</div>
+
+<div class="chart-box">
+<h3>3개년 모집단위 수염상자 (중앙값)</h3>
+<canvas id="boxChart" height="200"></canvas>
+</div>
+
+</div>
+</body>
+</html>
