@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모두의 2028대입을 위한 등급 변환기</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header>
+<h1>모두의 2028대입을 위한 등급 변환기</h1>
+<p class="subtitle">
+50:50 통합 등급은 부산 9등급과 대진대 9등급 평균값입니다.<br>
+데이터 출처: 어디가 3개년 입결 · 부산광역시교육청 등급 분석 자료 · 대진대학교 연구자료
+</p>
+</header>
+
+<section class="convert">
+<input type="number" id="g5" placeholder="5등급 평균 입력" step="0.01">
+<div class="cards">
+<div class="card" id="busan"></div>
+<div class="card" id="daejin"></div>
+<div class="card highlight" id="mix"></div>
+</div>
+</section>
+
+<section class="control">
+<select id="univ"></select>
+<div id="typeArea"></div>
+<button id="addType">전형 추가</button>
+</section>
+
+<section class="viz">
+<h2>📊 통계형 박스플롯</h2>
+<svg id="boxplot"></svg>
+</section>
+
+<section class="viz">
+<h2>🚄 레일 산포도</h2>
+<svg id="rail"></svg>
+</section>
+
+<section class="table-section">
+<h2>📋 모집단위 데이터</h2>
+<table id="datatable"></table>
+</section>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
