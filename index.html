@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모두의 2028대입 어디가 입결 변환</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="conversionData.js"></script>
+<script src="admissionData.js"></script>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+<h1>모두의 2028대입 어디가 입결 변환</h1>
+<div class="copyright">Copyright @All Teachers</div>
+</header>
+
+<section class="info-box">
+부산광역시교육청 5→9등급 대응자료와 대진대학교 연구자료(9등급 평균)를 기반으로
+5등급을 9등급으로 환산 후 「어디가」 3개년 입결(70%cut)과 비교합니다.
+</section>
+
+<section class="control-panel">
+
+<input type="number" id="grade5" step="0.01" min="1" max="5" placeholder="5등급 평균 입력">
+
+<select id="universitySelect"></select>
+<select id="typeSelect"></select>
+<select id="majorSelect"></select>
+
+<div class="radio-group">
+<label><input type="radio" name="mode" value="combined" checked> 50:50</label>
+<label><input type="radio" name="mode" value="busan"> 부산</label>
+<label><input type="radio" name="mode" value="daejin"> 대진</label>
+<label><input type="radio" name="mode" value="all"> 모두</label>
+</div>
+
+<button onclick="savePDF()">PDF 저장</button>
+
+</section>
+
+<section class="results">
+<div class="result-card" id="busanResult">부산: -</div>
+<div class="result-card" id="daejinResult">대진: -</div>
+<div class="result-card highlight" id="combinedResult">50:50: -</div>
+</section>
+
+<section class="charts">
+<canvas id="trendChart"></canvas>
+</section>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
