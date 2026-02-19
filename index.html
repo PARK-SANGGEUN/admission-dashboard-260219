@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모두의 2028대입을 위한 등급 변환기</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>모두의 2028대입을 위한 등급 변환기</h1>
+  <p class="copyright">Copyright@All Teachers</p>
+  <p class="desc">
+    50:50 통합 등급 = (부산 9등급 + 대진대 9등급) ÷ 2<br>
+    데이터 출처: 어디가 3개년 입결 · 부산광역시교육청 등급 분석 자료 · 대진대학교 연구자료
+  </p>
+</header>
+
+<section class="convert-section">
+  <input type="number" id="g5" step="0.01" placeholder="5등급 평균 입력">
+  <div class="cards">
+    <div class="card" id="busan"></div>
+    <div class="card" id="daejin"></div>
+    <div class="card highlight" id="mix"></div>
+  </div>
+</section>
+
+<section class="control-section">
+  <select id="univ"></select>
+  <div id="typeContainer"></div>
+  <button id="addType">전형 추가</button>
+</section>
+
+<section class="viz-section">
+  <h2>📊 3개년 수염상자</h2>
+  <svg id="boxplot"></svg>
+</section>
+
+<section class="viz-section">
+  <h2>🚄 전형별 3개년 레일</h2>
+  <svg id="rail"></svg>
+</section>
+
+<section class="table-section">
+  <h2>📋 모집단위 데이터</h2>
+  <table id="datatable"></table>
+</section>
+
+<div id="tooltip"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
