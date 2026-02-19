@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모두의 2028대입을 위한 등급 변환기</title>
+<link href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+</head>
+<body>
+
+<header>
+<h1>모두의 2028대입을 위한 등급 변환기</h1>
+<div class="copy">Copyright@All Teachers</div>
+<div class="source">
+데이터 출처: 어디가 3개년 입결 · 부산광역시교육청 등급 분석 자료 · 대진대학교 연구자료
+</div>
+</header>
+
+<section class="controls">
+<select id="univ"></select>
+<select id="typeA"></select>
+<select id="typeB"></select>
+<input type="number" id="grade5" step="0.01" placeholder="5등급 평균 입력">
+<button onclick="convert()">변환</button>
+</section>
+
+<section class="cards">
+<div class="card blue" id="busan">부산 9등급</div>
+<div class="card green" id="daejin">대진대 9등급</div>
+<div class="card purple" id="mix">50:50 통합</div>
+</section>
+
+<section class="panel">
+<h2>📊 통계형 박스플롯 (전형 비교)</h2>
+<canvas id="boxChart"></canvas>
+</section>
+
+<section class="panel">
+<h2>🚄 레일 산포도 (전형 비교)</h2>
+<canvas id="railChart"></canvas>
+</section>
+
+<section class="panel">
+<h2>📋 모집단위 데이터</h2>
+<div class="table-wrap"><table id="dataTable"></table></div>
+</section>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
