@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>모두의 2028대입 어디가 입결 변환</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Stable Chart.js + BoxPlot plugin (Chart.js v3 compatible) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-box-and-violin-plot@3.4.0/build/Chart.BoxPlot.min.js"></script>
+
+  <script defer src="conversionData.js"></script>
+  <script defer src="admissionData.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="title-wrap">
+        <h1 class="title">모두의 2028대입 어디가 입결 변환</h1>
+        <div class="sub">Copyright @All Teachers</div>
+      </div>
+
+      <div class="notice">
+        <div class="notice-title">시스템 안내</div>
+        <div class="notice-body">
+          부산광역시교육청 5→9등급 대응자료와 대진대학교 연구자료(9등급 평균값)를 바탕으로 2028학년도 5등급 체제 성적을 9등급으로 환산합니다.
+          환산 결과는 「어디가」 2023·2024·2025학년도 3개년 입시결과(70% cut 기준)와 비교하여, 위치를 시각적으로 확인할 수 있습니다.
+        </div>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-left">
+        <div class="input-card">
+          <div class="input-row">
+            <div class="field">
+              <label>5등급 평균 입력</label>
+              <input id="grade5" type="number" step="0.01" min="1" max="5" placeholder="예: 3.25" />
+              <div class="hint">입력값은 가장 가까운 0.05 단위로 자동 맞춤됩니다.</div>
+            </div>
+
+            <div class="field">
+              <label>필터</label>
+              <div class="filters">
+                <select id="uni"></select>
+                <select id="type"></select>
+                <select id="major"></select>
+              </div>
+              <div class="hint">대학 → 중심전형 → 모집단위 순으로 자동 필터링</div>
+            </div>
+          </div>
+
+          <div class="result-grid">
+            <div class="result-card tone-blue">
+              <div class="rc-title">부산 기준</div>
+              <div class="rc-value" id="v-busan">-</div>
+              <div class="rc-desc">누적비 실측자료</div>
+            </div>
+            <div class="result-card tone-green">
+              <div class="rc-title">대진 기준</div>
+              <div class="rc-value" id="v-daejin">-</div>
+              <div class="rc-desc">세분화 모형 평균</div>
+            </div>
+            <div class="result-card tone-indigo primary">
+              <div class="rc-title">50:50 통합 (기본)</div>
+              <div class="rc-value" id="v-combined">-</div>
+              <div class="rc-desc">부산+대진 평균</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="btn-pdf">PDF 저장</button>
+            <div class="small-note">PDF 저장은 브라우저 인쇄 기능을 사용합니다.</div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="card-head">
+            <div class="card-title">변환 방식 비교</div>
+            <div class="card-sub">동일한 5등급 입력에 대한 부산/대진/통합(50:50) 9등급 환산 비교</div>
+          </div>
+          <canvas id="compareChart" height="140"></canvas>
+        </div>
+      </div>
+
+      <div class="panel-right">
+        <div class="chart-card">
+          <div class="card-head">
+            <div class="card-title">3개년 수염상자 + 사용자 위치</div>
+            <div class="card-sub">선택한 대학·중심전형의 전체 모집단위 분포(70%cut). 평균선(주황) + 선택 모집단위(검정) + 사용자 환산값(빨강)</div>
+          </div>
+          <canvas id="boxChart" height="220"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <div class="card-head">
+            <div class="card-title">전체 모집단위 산포도</div>
+            <div class="card-sub">3개년 전체 모집단위 70%cut 분포(연도별 색상). 사용자 환산값은 빨강으로 표시</div>
+          </div>
+          <canvas id="scatterChart" height="240"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-card">
+      <div class="card-head">
+        <div class="card-title">데이터표</div>
+        <div class="card-sub">선택 모집단위의 70%cut(3개년) 및 증감. 사용자 환산값(50:50)과의 차이를 함께 표시</div>
+      </div>
+      <div class="table-wrap">
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>연도</th>
+              <th>70%cut</th>
+              <th>전년 대비</th>
+              <th>사용자(50:50) 대비</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>※ 본 도구는 학교 내부 분석/상담 지원 목적의 참고 자료입니다. (공식 전형 결과/모집요강은 대학 발표 자료를 우선합니다.)</div>
+    </footer>
+  </div>
+</body>
+</html>
