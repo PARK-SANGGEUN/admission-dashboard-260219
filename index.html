@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>입시결과 운영 2.0</title>
+
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-box-and-violin-plot/build/Chart.BoxPlot.js"></script>
+</head>
+<body>
+
+<div id="loader"><div class="spinner"></div></div>
+
+<header><h1>📊 입시결과 운영 시스템 2.0</h1></header>
+
+<section class="card">
+<select id="univ"></select>
+<select id="center"></select>
+<select id="type"></select>
+<select id="major"></select>
+<button onclick="resetFilter()">초기화</button>
+</section>
+
+<section class="card">
+<canvas id="boxChart"></canvas>
+</section>
+
+<section class="card">
+<canvas id="railChart"></canvas>
+</section>
+
+<section class="card">
+<div id="dataTable"></div>
+</section>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
