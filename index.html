@@ -1,158 +1,80 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>모두의 2028대입을 위한 등급 변환기</title>
-
 <script src="https://d3js.org/d3.v7.min.js"></script>
-<link rel="stylesheet" href="style.css">
-
-<style>
-body{
-  font-family: 'Pretendard', sans-serif;
-  margin:0;
-  background:#f5f6fa;
-  color:#111;
-}
-header{
-  text-align:center;
-  padding:50px 20px 30px;
-  background:white;
-}
-h1{
-  font-size:42px;
-  font-weight:900;
-  margin-bottom:10px;
-}
-.sub{
-  font-weight:700;
-  margin-bottom:8px;
-}
-.desc{
-  font-size:14px;
-  color:#555;
-  line-height:1.6;
-}
-section{
-  background:white;
-  margin:30px auto;
-  padding:30px;
-  max-width:1300px;
-  border-radius:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.05);
-}
-.convert-box{
-  text-align:center;
-}
-#g5{
-  padding:14px;
-  font-size:20px;
-  width:260px;
-  border-radius:12px;
-  border:2px solid #ddd;
-}
-.cards{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  margin-top:30px;
-  flex-wrap:wrap;
-}
-.card{
-  padding:30px 40px;
-  border-radius:18px;
-  font-size:24px;
-  font-weight:900;
-  min-width:240px;
-  color:white;
-}
-#busan{background:#2563eb;}
-#daejin{background:#059669;}
-#mix{background:linear-gradient(135deg,#6d28d9,#9333ea);}
-.control{
-  display:flex;
-  gap:15px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-select,button{
-  padding:10px 14px;
-  font-size:15px;
-  border-radius:10px;
-}
-button{
-  background:#111;
-  color:white;
-  border:none;
-  cursor:pointer;
-}
-svg{
-  width:100%;
-  height:450px;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:14px;
-}
-th,td{
-  padding:10px;
-  text-align:center;
-  border-bottom:1px solid #eee;
-}
-th{
-  background:#111;
-  color:white;
-  font-weight:800;
-}
-@media(max-width:768px){
-  h1{font-size:28px;}
-  .card{font-size:20px;}
-}
-</style>
+<link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
-<header>
-  <h1>모두의 2028대입을 위한 등급 변환기</h1>
-  <div class="sub">Copyright@All Teachers</div>
-  <div class="desc">
-    50:50 통합 등급은 (부산 9등급 + 대진대 9등급) ÷ 2 로 계산됩니다.<br>
-    데이터 출처: 어디가 3개년 입결 · 부산광역시교육청 등급 분석 자료 · 대진대학교 연구자료
+<header class="header">
+  <div class="header-inner">
+    <h1>모두의 2028대입을 위한 등급 변환기</h1>
+    <div class="copyright">Copyright@All Teachers</div>
+    <div class="desc">
+      50:50 통합 등급 = (부산 9등급 + 대진대 9등급) ÷ 2<br/>
+      데이터 출처: 어디가 3개년 입결 · 부산광역시교육청 등급 분석 자료 · 대진대학교 연구자료
+    </div>
   </div>
 </header>
 
-<section class="convert-box">
-  <input type="number" id="g5" step="0.01" placeholder="5등급 평균 입력">
-  <div class="cards">
-    <div class="card" id="busan">부산 9등급</div>
-    <div class="card" id="daejin">대진대 9등급</div>
-    <div class="card" id="mix">50:50 통합</div>
-  </div>
-</section>
+<main class="dashboard">
 
-<section>
-  <div class="control">
-    <select id="univ"></select>
-    <div id="typeContainer"></div>
-    <button id="addType">전형 추가</button>
-  </div>
-</section>
+  <!-- KPI -->
+  <section class="kpi-section">
+    <div class="kpi-input">
+      <input type="number" id="g5" step="0.01" placeholder="5등급 평균 입력" />
+    </div>
+    <div class="kpi-cards">
+      <div class="kpi blue" id="busanKpi">
+        <div class="kpi-title">부산 9등급</div>
+        <div class="kpi-value">-</div>
+        <div class="kpi-sub">변환 결과</div>
+      </div>
+      <div class="kpi green" id="daejinKpi">
+        <div class="kpi-title">대진대 9등급</div>
+        <div class="kpi-value">-</div>
+        <div class="kpi-sub">변환 결과</div>
+      </div>
+      <div class="kpi purple" id="mixKpi">
+        <div class="kpi-title">50:50 통합</div>
+        <div class="kpi-value">-</div>
+        <div class="kpi-sub">평균값</div>
+      </div>
+    </div>
+  </section>
 
-<section>
-  <h2>📊 3개년 수염상자 통계</h2>
-  <svg id="boxplot"></svg>
-</section>
+  <!-- 전형 선택 -->
+  <section class="filter-section">
+    <div class="filter-left">
+      <select id="univ"></select>
+      <button id="addType">전형 추가</button>
+    </div>
+    <div id="typeCards" class="type-cards"></div>
+  </section>
 
-<section>
-  <h2>📋 모집단위 상세 데이터</h2>
-  <table id="datatable"></table>
-</section>
+  <!-- 박스플롯 + 통계 요약 -->
+  <section class="analysis-section">
+    <div class="box-area">
+      <h2>📊 3개년 수염상자 통계</h2>
+      <svg id="boxplot"></svg>
+    </div>
+    <div class="summary-area">
+      <h2>📈 통계 요약</h2>
+      <div id="summaryPanel"></div>
+    </div>
+  </section>
+
+  <!-- 데이터 테이블 -->
+  <section class="table-section">
+    <h2>📋 모집단위 상세 데이터</h2>
+    <table id="datatable"></table>
+  </section>
+
+</main>
 
 <script src="app.js"></script>
-
 </body>
 </html>
