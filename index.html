@@ -1,79 +1,56 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>모두의 2028대입을 위한 등급 변환기</title>
 <script src="https://d3js.org/d3.v7.min.js"></script>
-<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="header">
-  <div class="header-inner">
-    <h1>모두의 2028대입을 위한 등급 변환기</h1>
-    <div class="copyright">Copyright@All Teachers</div>
-    <div class="desc">
-      50:50 통합 등급 = (부산 9등급 + 대진대 9등급) ÷ 2<br/>
-      데이터 출처: 어디가 3개년 입결 · 부산광역시교육청 등급 분석 자료 · 대진대학교 연구자료
-    </div>
+<header>
+  <h1>모두의 2028대입을 위한 등급 변환기</h1>
+  <div class="sub">Copyright@All Teachers</div>
+  <div class="desc">
+    50:50 통합 등급 = (부산 9등급 + 대진대 9등급) ÷ 2<br>
+    데이터 출처: 어디가 3개년 입결 · 부산광역시교육청 등급 분석 자료 · 대진대학교 연구자료
   </div>
 </header>
 
-<main class="dashboard">
+<div class="top-filter">
 
-  <!-- KPI -->
-  <section class="kpi-section">
-    <div class="kpi-input">
-      <input type="number" id="g5" step="0.01" placeholder="5등급 평균 입력" />
-    </div>
-    <div class="kpi-cards">
-      <div class="kpi blue" id="busanKpi">
-        <div class="kpi-title">부산 9등급</div>
-        <div class="kpi-value">-</div>
-        <div class="kpi-sub">변환 결과</div>
-      </div>
-      <div class="kpi green" id="daejinKpi">
-        <div class="kpi-title">대진대 9등급</div>
-        <div class="kpi-value">-</div>
-        <div class="kpi-sub">변환 결과</div>
-      </div>
-      <div class="kpi purple" id="mixKpi">
-        <div class="kpi-title">50:50 통합</div>
-        <div class="kpi-value">-</div>
-        <div class="kpi-sub">평균값</div>
-      </div>
-    </div>
-  </section>
+  <div class="slider-box">
+    <label>5등급 평균</label>
+    <input type="range" id="gradeSlider" min="1" max="5" step="0.01" value="3">
+    <div id="gradeValue">3.00</div>
+  </div>
 
-  <!-- 전형 선택 -->
-  <section class="filter-section">
-    <div class="filter-left">
-      <select id="univ"></select>
-      <button id="addType">전형 추가</button>
+  <div class="convert-box">
+    <div class="convert-card blue">
+      부산 9등급
+      <strong id="busanValue">-</strong>
     </div>
-    <div id="typeCards" class="type-cards"></div>
-  </section>
-
-  <!-- 박스플롯 + 통계 요약 -->
-  <section class="analysis-section">
-    <div class="box-area">
-      <h2>📊 3개년 수염상자 통계</h2>
-      <svg id="boxplot"></svg>
+    <div class="convert-card green">
+      대진대 9등급
+      <strong id="daejinValue">-</strong>
     </div>
-    <div class="summary-area">
-      <h2>📈 통계 요약</h2>
-      <div id="summaryPanel"></div>
+    <div class="convert-card purple">
+      50:50 통합
+      <strong id="mixValue">-</strong>
     </div>
-  </section>
+  </div>
 
-  <!-- 데이터 테이블 -->
-  <section class="table-section">
-    <h2>📋 모집단위 상세 데이터</h2>
-    <table id="datatable"></table>
-  </section>
+  <div class="univ-box">
+    <label>대학 선택</label>
+    <select id="univSelect"></select>
+  </div>
 
-</main>
+</div>
+
+<div class="rail-wrapper">
+  <div id="railContainer"></div>
+</div>
 
 <script src="app.js"></script>
 </body>
