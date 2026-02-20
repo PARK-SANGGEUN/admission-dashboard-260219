@@ -1,110 +1,180 @@
 Promise.all([
   fetch("data/admission.json").then(r=>r.json()),
   fetch("data/convert.json").then(r=>r.json())
-]).then(([admission, convert])=>{
+]).then(([admissionData, convertData])=>{
 
-const input = document.getElementById("g5");
-const busanKpi = document.querySelector("#busanKpi .kpi-value");
-const daejinKpi = document.querySelector("#daejinKpi .kpi-value");
-const mixKpi = document.querySelector("#mixKpi .kpi-value");
+let selectedUniversity;
+let userGradeValue;
 
-input.addEventListener("input",()=>{
-  const val = parseFloat(input.value);
-  if(isNaN(val)) return;
+const slider = document.getElementById("gradeSlider");
+const gradeValue = document.getElementById("gradeValue");
+const busanValue = document.getElementById("busanValue");
+const daejinValue = document.getElementById("daejinValue");
+const mixValue = document.getElementById("mixValue");
 
-  const b = convert.busan[val];
-  const d = convert.daejin[val];
-  if(!b||!d) return;
+slider.addEventListener("input",()=>{
+  const val = parseFloat(slider.value).toFixed(2);
+  gradeValue.textContent = val;
+  userGradeValue = null;
 
-  const m = ((b+d)/2).toFixed(2);
-  busanKpi.textContent = b;
-  daejinKpi.textContent = d;
-  mixKpi.textContent = m;
+  const b = convertData.busan[val];
+  const d = convertData.daejin[val];
 
-  drawBox(m);
-});
-
-const univSelect = document.getElementById("univ");
-const addBtn = document.getElementById("addType");
-const typeCards = document.getElementById("typeCards");
-
-[...new Set(admission.map(d=>d.university))]
-.forEach(u=>{
-  const o=document.createElement("option");
-  o.value=u; o.textContent=u;
-  univSelect.appendChild(o);
-});
-
-let selectedTypes=[];
-
-addBtn.onclick=()=>{
-  const types=[...new Set(
-    admission.filter(d=>d.university===univSelect.value)
-    .map(d=>d.type)
-  )];
-  const t=types[0];
-  if(!selectedTypes.includes(t)){
-    selectedTypes.push(t);
-    renderTypeCards();
-    drawTable();
+  if(b && d){
+    const m = ((b+d)/2).toFixed(2);
+    busanValue.textContent = b;
+    daejinValue.textContent = d;
+    mixValue.textContent = m;
+    userGradeValue = parseFloat(m);
   }
-};
 
-function renderTypeCards(){
-  typeCards.innerHTML="";
-  selectedTypes.forEach(t=>{
-    const div=document.createElement("div");
-    div.className="type-card";
-    div.innerHTML=`${t} <span>✕</span>`;
-    div.querySelector("span").onclick=()=>{
-      selectedTypes=selectedTypes.filter(x=>x!==t);
-      renderTypeCards();
-      drawTable();
-    };
-    typeCards.appendChild(div);
+  if(selectedUniversity) renderRail();
+});
+
+const univSelect = document.getElementById("univSelect");
+const universities = [...new Set(admissionData.map(d=>d.university))];
+
+universities.forEach(u=>{
+  const option=document.createElement("option");
+  option.value=u;
+  option.textContent=u;
+  univSelect.appendChild(option);
+});
+
+selectedUniversity = universities[0];
+
+univSelect.addEventListener("change",()=>{
+  selectedUniversity = univSelect.value;
+  renderRail();
+});
+
+renderRail();
+
+function renderRail(){
+
+  const wrapper = d3.select("#railContainer");
+  wrapper.html("");
+
+  const width = 1400;
+  const height = 140;
+
+  const years = ["2024","2025","2026"];
+
+  const yearColor = {
+    "2024": "#2563eb",
+    "2025": "#16a34a",
+    "2026": "#dc2626"
+  };
+
+  const filtered = admissionData.filter(d =>
+    d.university === selectedUniversity &&
+    !isNaN(d.cut70)
+  );
+
+  if(filtered.length === 0) return;
+
+  const xMin = d3.min(filtered, d=>+d.cut70);
+  const xMax = d3.max(filtered, d=>+d.cut70);
+
+  const xScale = d3.scaleLinear()
+    .domain([xMin-0.05, xMax+0.05])
+    .range([80, width-40]);
+
+  const svg = wrapper.append("svg")
+    .attr("width", width)
+    .attr("height", height*years.length);
+
+  svg.append("g")
+    .attr("transform","translate(0,30)")
+    .call(d3.axisTop(xScale).ticks(10));
+
+  years.forEach((year, i)=>{
+
+    const yPosition = 60 + (i * height);
+
+    svg.append("text")
+      .attr("x", 30)
+      .attr("y", yPosition+5)
+      .attr("font-size", "18px")
+      .attr("font-weight", "900")
+      .attr("fill", yearColor[year])
+      .text(year);
+
+    const yearData = filtered
+      .filter(d=>d.year===year)
+      .map(d=>({
+        major: d.major,
+        value: +d.cut70
+      }));
+
+    const group = svg.append("g");
+
+    group.selectAll("circle")
+      .data(yearData)
+      .enter()
+      .append("circle")
+      .attr("cx", d=>xScale(d.value))
+      .attr("cy", yPosition)
+      .attr("r", 6)
+      .attr("fill", yearColor[year]);
+
+    const sorted = [...yearData].sort((a,b)=>a.value-b.value);
+
+    const fixed = [
+      ...sorted.slice(0,3),
+      ...sorted.slice(Math.floor(sorted.length/2)-1, Math.floor(sorted.length/2)+2),
+      ...sorted.slice(-3)
+    ];
+
+    const labels = group.selectAll(".label")
+      .data(fixed)
+      .enter()
+      .append("text")
+      .attr("font-size", "12px")
+      .attr("font-weight", "700")
+      .attr("fill", "#111")
+      .text(d=>`${d.major} ${d.value.toFixed(2)}`);
+
+    const simulation = d3.forceSimulation(fixed)
+      .force("x", d3.forceX(d=>xScale(d.value)).strength(1))
+      .force("y", d3.forceY(yPosition-18))
+      .force("collide", d3.forceCollide(35))
+      .stop();
+
+    for(let j=0;j<120;j++) simulation.tick();
+
+    labels
+      .attr("x", d=>d.x)
+      .attr("y", d=>d.y)
+      .attr("text-anchor","middle");
+
+    const tooltip = d3.select("body")
+      .append("div")
+      .attr("class","tooltip")
+      .style("display","none");
+
+    group.selectAll("circle")
+      .on("mouseover",(event,d)=>{
+        tooltip
+          .html(`${d.major}<br>${d.value.toFixed(2)}`)
+          .style("left",(event.pageX+10)+"px")
+          .style("top",(event.pageY-20)+"px")
+          .style("display","block");
+      })
+      .on("mouseout",()=>tooltip.style("display","none"));
+
   });
-}
 
-function drawTable(){
-  const table=document.getElementById("datatable");
-  const filtered=admission.filter(d=>selectedTypes.includes(d.type));
-  if(!filtered.length){ table.innerHTML=""; return;}
-  table.innerHTML="<tr><th>연도</th><th>전형</th><th>모집단위</th><th>70%</th></tr>"+
-  filtered.map(d=>`<tr><td>${d.year}</td><td>${d.type}</td><td>${d.major}</td><td>${d.cut70}</td></tr>`).join("");
-}
-
-function drawBox(userValue){
-  const svg=d3.select("#boxplot");
-  svg.selectAll("*").remove();
-
-  const width=svg.node().clientWidth;
-  const height=400;
-  const margin={top:20,right:30,bottom:40,left:60};
-  const g=svg.append("g")
-    .attr("transform",`translate(${margin.left},${margin.top})`);
-
-  const x=d3.scaleBand()
-    .domain(["2023","2024","2025"])
-    .range([0,width-100])
-    .padding(0.4);
-
-  const y=d3.scaleLinear()
-    .domain([0,9])
-    .range([height-margin.top-margin.bottom,0]);
-
-  g.append("g")
-   .attr("transform",`translate(0,${height-60})`)
-   .call(d3.axisBottom(x));
-  g.append("g").call(d3.axisLeft(y));
-
-  g.append("line")
-    .attr("x1",0)
-    .attr("x2",width)
-    .attr("y1",y(userValue))
-    .attr("y2",y(userValue))
-    .attr("stroke","red")
-    .attr("stroke-width",3)
-    .attr("stroke-dasharray","5,5");
+  if(userGradeValue){
+    svg.append("line")
+      .attr("x1", xScale(userGradeValue))
+      .attr("x2", xScale(userGradeValue))
+      .attr("y1", 30)
+      .attr("y2", height*years.length)
+      .attr("stroke","red")
+      .attr("stroke-width",3)
+      .attr("stroke-dasharray","6,4");
+  }
 }
 
 });
