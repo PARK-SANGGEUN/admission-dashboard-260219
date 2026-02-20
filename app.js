@@ -1,228 +1,110 @@
-// =============================
-// 데이터 로드
-// =============================
+Promise.all([
+  fetch("data/admission.json").then(r=>r.json()),
+  fetch("data/convert.json").then(r=>r.json())
+]).then(([admission, convert])=>{
 
-const admissionPromise = fetch("data/admission.json").then(res => {
-    if (!res.ok) throw new Error("admission.json 로드 실패");
-    return res.json();
+const input = document.getElementById("g5");
+const busanKpi = document.querySelector("#busanKpi .kpi-value");
+const daejinKpi = document.querySelector("#daejinKpi .kpi-value");
+const mixKpi = document.querySelector("#mixKpi .kpi-value");
+
+input.addEventListener("input",()=>{
+  const val = parseFloat(input.value);
+  if(isNaN(val)) return;
+
+  const b = convert.busan[val];
+  const d = convert.daejin[val];
+  if(!b||!d) return;
+
+  const m = ((b+d)/2).toFixed(2);
+  busanKpi.textContent = b;
+  daejinKpi.textContent = d;
+  mixKpi.textContent = m;
+
+  drawBox(m);
 });
 
-const convertPromise = fetch("data/convert.json").then(res => {
-    if (!res.ok) throw new Error("convert.json 로드 실패");
-    return res.json();
+const univSelect = document.getElementById("univ");
+const addBtn = document.getElementById("addType");
+const typeCards = document.getElementById("typeCards");
+
+[...new Set(admission.map(d=>d.university))]
+.forEach(u=>{
+  const o=document.createElement("option");
+  o.value=u; o.textContent=u;
+  univSelect.appendChild(o);
 });
 
-Promise.all([admissionPromise, convertPromise])
-.then(([admissionData, convertData]) => {
+let selectedTypes=[];
 
-    // =============================
-    // 등급 변환 기능
-    // =============================
+addBtn.onclick=()=>{
+  const types=[...new Set(
+    admission.filter(d=>d.university===univSelect.value)
+    .map(d=>d.type)
+  )];
+  const t=types[0];
+  if(!selectedTypes.includes(t)){
+    selectedTypes.push(t);
+    renderTypeCards();
+    drawTable();
+  }
+};
 
-    const input = document.getElementById("g5");
-    const busanCard = document.getElementById("busan");
-    const daejinCard = document.getElementById("daejin");
-    const mixCard = document.getElementById("mix");
+function renderTypeCards(){
+  typeCards.innerHTML="";
+  selectedTypes.forEach(t=>{
+    const div=document.createElement("div");
+    div.className="type-card";
+    div.innerHTML=`${t} <span>✕</span>`;
+    div.querySelector("span").onclick=()=>{
+      selectedTypes=selectedTypes.filter(x=>x!==t);
+      renderTypeCards();
+      drawTable();
+    };
+    typeCards.appendChild(div);
+  });
+}
 
-    input.addEventListener("input", () => {
-        const val = parseFloat(input.value);
-        if (isNaN(val)) return;
+function drawTable(){
+  const table=document.getElementById("datatable");
+  const filtered=admission.filter(d=>selectedTypes.includes(d.type));
+  if(!filtered.length){ table.innerHTML=""; return;}
+  table.innerHTML="<tr><th>연도</th><th>전형</th><th>모집단위</th><th>70%</th></tr>"+
+  filtered.map(d=>`<tr><td>${d.year}</td><td>${d.type}</td><td>${d.major}</td><td>${d.cut70}</td></tr>`).join("");
+}
 
-        const busan = convertData.busan[val] || "";
-        const daejin = convertData.daejin[val] || "";
+function drawBox(userValue){
+  const svg=d3.select("#boxplot");
+  svg.selectAll("*").remove();
 
-        if (busan && daejin) {
-            const mix = ((busan + daejin) / 2).toFixed(2);
+  const width=svg.node().clientWidth;
+  const height=400;
+  const margin={top:20,right:30,bottom:40,left:60};
+  const g=svg.append("g")
+    .attr("transform",`translate(${margin.left},${margin.top})`);
 
-            busanCard.innerHTML = `부산 9등급<br><strong>${busan}</strong>`;
-            daejinCard.innerHTML = `대진대 9등급<br><strong>${daejin}</strong>`;
-            mixCard.innerHTML = `50:50 통합<br><strong>${mix}</strong>`;
-        }
-    });
+  const x=d3.scaleBand()
+    .domain(["2023","2024","2025"])
+    .range([0,width-100])
+    .padding(0.4);
 
-    // =============================
-    // 대학 드롭다운 구성
-    // =============================
+  const y=d3.scaleLinear()
+    .domain([0,9])
+    .range([height-margin.top-margin.bottom,0]);
 
-    const univSelect = document.getElementById("univ");
-    const typeContainer = document.getElementById("typeContainer");
-    const addBtn = document.getElementById("addType");
+  g.append("g")
+   .attr("transform",`translate(0,${height-60})`)
+   .call(d3.axisBottom(x));
+  g.append("g").call(d3.axisLeft(y));
 
-    const universities = [...new Set(admissionData.map(d => d.university))];
+  g.append("line")
+    .attr("x1",0)
+    .attr("x2",width)
+    .attr("y1",y(userValue))
+    .attr("y2",y(userValue))
+    .attr("stroke","red")
+    .attr("stroke-width",3)
+    .attr("stroke-dasharray","5,5");
+}
 
-    universities.forEach(u => {
-        const option = document.createElement("option");
-        option.value = u;
-        option.textContent = u;
-        univSelect.appendChild(option);
-    });
-
-    let selectedTypes = [];
-
-    addBtn.addEventListener("click", () => {
-        const selectedUniv = univSelect.value;
-        const types = [...new Set(
-            admissionData
-            .filter(d => d.university === selectedUniv)
-            .map(d => d.type)
-        )];
-
-        const select = document.createElement("select");
-
-        types.forEach(t => {
-            const option = document.createElement("option");
-            option.value = t;
-            option.textContent = t;
-            select.appendChild(option);
-        });
-
-        select.addEventListener("change", drawAll);
-        typeContainer.appendChild(select);
-
-        selectedTypes.push(select.value);
-        drawAll();
-    });
-
-    // =============================
-    // 전체 그리기 함수
-    // =============================
-
-    function drawAll() {
-        const typeSelects = typeContainer.querySelectorAll("select");
-        selectedTypes = [...typeSelects].map(s => s.value);
-
-        drawBoxPlot();
-        drawTable();
-    }
-
-    // =============================
-    // 박스플롯
-    // =============================
-
-    function drawBoxPlot() {
-
-        const svg = d3.select("#boxplot");
-        svg.selectAll("*").remove();
-
-        const width = svg.node().clientWidth;
-        const height = 450;
-
-        const margin = { top: 30, right: 40, bottom: 50, left: 60 };
-        const innerWidth = width - margin.left - margin.right;
-        const innerHeight = height - margin.top - margin.bottom;
-
-        const g = svg.append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-
-        const filtered = admissionData.filter(d =>
-            selectedTypes.includes(d.type)
-        );
-
-        if (filtered.length === 0) return;
-
-        const years = ["2023", "2024", "2025"];
-
-        const x = d3.scaleBand()
-            .domain(years)
-            .range([0, innerWidth])
-            .padding(0.4);
-
-        const y = d3.scaleLinear()
-            .domain([0, 9])
-            .range([innerHeight, 0]);
-
-        g.append("g")
-            .attr("transform", `translate(0,${innerHeight})`)
-            .call(d3.axisBottom(x));
-
-        g.append("g")
-            .call(d3.axisLeft(y));
-
-        years.forEach(year => {
-            const yearData = filtered
-                .filter(d => d.year === year)
-                .map(d => +d.cut70)
-                .filter(v => !isNaN(v));
-
-            if (yearData.length === 0) return;
-
-            yearData.sort(d3.ascending);
-
-            const q1 = d3.quantile(yearData, 0.25);
-            const median = d3.quantile(yearData, 0.5);
-            const q3 = d3.quantile(yearData, 0.75);
-            const min = d3.min(yearData);
-            const max = d3.max(yearData);
-
-            const center = x(year) + x.bandwidth() / 2;
-
-            // 수염
-            g.append("line")
-                .attr("x1", center)
-                .attr("x2", center)
-                .attr("y1", y(min))
-                .attr("y2", y(max))
-                .attr("stroke", "black")
-                .attr("stroke-width", 3);
-
-            // 박스
-            g.append("rect")
-                .attr("x", center - 40)
-                .attr("y", y(q3))
-                .attr("width", 80)
-                .attr("height", y(q1) - y(q3))
-                .attr("fill", "#6d28d9")
-                .attr("opacity", 0.7)
-                .attr("stroke", "black")
-                .attr("stroke-width", 2);
-
-            // 중앙선
-            g.append("line")
-                .attr("x1", center - 40)
-                .attr("x2", center + 40)
-                .attr("y1", y(median))
-                .attr("y2", y(median))
-                .attr("stroke", "black")
-                .attr("stroke-width", 3);
-        });
-    }
-
-    // =============================
-    // 데이터 테이블
-    // =============================
-
-    function drawTable() {
-        const table = document.getElementById("datatable");
-        table.innerHTML = "";
-
-        const filtered = admissionData.filter(d =>
-            selectedTypes.includes(d.type)
-        );
-
-        if (filtered.length === 0) return;
-
-        const header = `
-            <tr>
-                <th>연도</th>
-                <th>전형</th>
-                <th>모집단위</th>
-                <th>70%컷</th>
-            </tr>
-        `;
-
-        const rows = filtered.map(d => `
-            <tr>
-                <td>${d.year}</td>
-                <td>${d.type}</td>
-                <td>${d.major}</td>
-                <td>${d.cut70}</td>
-            </tr>
-        `).join("");
-
-        table.innerHTML = header + rows;
-    }
-
-})
-.catch(err => {
-    console.error("데이터 로드 실패:", err);
 });
