@@ -1,10 +1,17 @@
+/* =========================================================
+   GLOBAL ROOT VARIABLES
+========================================================= */
+
 :root{
   --bg:#f3f6fb;
   --card:#ffffff;
   --ink:#0b1220;
   --muted:#5b657a;
   --line:rgba(15,23,42,.12);
+  --lineSoft:rgba(15,23,42,.06);
   --shadow:0 14px 34px rgba(15,23,42,.12);
+  --shadowSoft:0 8px 20px rgba(15,23,42,.08);
+  --shadowDeep:0 24px 60px rgba(15,23,42,.18);
   --r:18px;
 
   --c2023:#dc2626;
@@ -24,6 +31,10 @@
   --userLine:#ef4444;
 }
 
+/* =========================================================
+   BASE RESET
+========================================================= */
+
 *{box-sizing:border-box}
 html,body{height:100%}
 
@@ -32,9 +43,12 @@ body{
   font-family:Pretendard, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif;
   background:var(--bg);
   color:var(--ink);
+  -webkit-font-smoothing:antialiased;
 }
 
-/* ================= HEADER ================= */
+/* =========================================================
+   HEADER
+========================================================= */
 
 .top{
   display:flex;
@@ -68,7 +82,9 @@ body{
 
 .noteLine{margin-top:2px}
 
-/* ================= CONTROLS ================= */
+/* =========================================================
+   CONTROLS
+========================================================= */
 
 .controls{
   display:flex;
@@ -81,9 +97,14 @@ body{
   background:var(--card);
   border:1px solid var(--line);
   border-radius:16px;
-  box-shadow:var(--shadow);
+  box-shadow:var(--shadowSoft);
   padding:12px 12px;
   min-width:220px;
+  transition:.2s;
+}
+
+.ctlBox:hover{
+  box-shadow:var(--shadow);
 }
 
 .ctlTitle{
@@ -129,81 +150,16 @@ select{
   background:#fff;
   font-size:16px;
   font-weight:950;
+  transition:.2s;
 }
 
-.compareRow{
-  display:flex;
-  gap:8px;
-  align-items:center;
+select:hover{
+  border-color:#1d4ed8;
 }
 
-.compareRow select{
-  flex:1;
-  min-width:150px;
-}
-
-.btn{
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid rgba(0,0,0,.06);
-  background:#0b1220;
-  color:#fff;
-  font-weight:950;
-  cursor:pointer;
-  transition:.15s;
-}
-
-.btn:hover{
-  background:#111827;
-}
-
-.btn.ghost{
-  background:#fff;
-  color:#0b1220;
-  border:1px solid var(--line);
-}
-
-.btn.ghost:hover{
-  background:#f1f5f9;
-}
-
-.btn:active{
-  transform:translateY(1px);
-}
-
-/* ================= CHIPS ================= */
-
-.chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:10px;
-}
-
-.chip{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 10px;
-  background:var(--chipBg);
-  color:var(--chipInk);
-  border:1px solid rgba(29,78,216,.16);
-  border-radius:999px;
-  font-size:13px;
-  font-weight:950;
-}
-
-.chip .x{
-  width:20px;
-  height:20px;
-  border-radius:999px;
-  border:0;
-  background:rgba(0,0,0,.08);
-  cursor:pointer;
-  font-weight:950;
-}
-
-/* ================= CARDS ================= */
+/* =========================================================
+   CARDS
+========================================================= */
 
 .cardsWrap{
   padding:0 22px 8px;
@@ -232,8 +188,17 @@ select{
   transition:.25s;
 }
 
+.gcard::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),transparent);
+  pointer-events:none;
+}
+
 .gcard:hover{
-  transform:translateY(-2px);
+  transform:translateY(-3px);
+  box-shadow:var(--shadowDeep);
 }
 
 .gcard .glabel{
@@ -261,72 +226,9 @@ select{
   background:linear-gradient(135deg,#7c3aed,#9333ea);
 }
 
-/* ================= MODE BAR ================= */
-
-.modeBar{
-  display:flex;
-  gap:8px;
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:16px;
-  box-shadow:var(--shadow);
-  padding:8px;
-}
-
-.modeBtn{
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid transparent;
-  background:transparent;
-  font-weight:950;
-  cursor:pointer;
-}
-
-.modeBtn.active{
-  background:#0b1220;
-  color:#fff;
-}
-
-/* ================= HERO ================= */
-
-.hero{
-  margin:10px 22px 18px;
-  padding:18px;
-  border-radius:var(--r);
-  background:linear-gradient(120deg,#eef2ff,#f8fafc);
-  border:1px solid var(--line);
-  box-shadow:var(--shadow);
-}
-
-.heroTitle{
-  font-size:26px;
-  font-weight:950;
-}
-
-.heroDesc{
-  margin-top:10px;
-  font-size:16px;
-  font-weight:900;
-  color:#1f2a44;
-  line-height:1.45;
-}
-
-.legend{
-  margin-top:10px;
-  font-size:16px;
-  font-weight:950;
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-
-.y2023{color:var(--c2023)}
-.y2024{color:var(--c2024)}
-.y2025{color:var(--c2025)}
-.uLine{color:var(--userLine)}
-
-/* ================= RAIL ================= */
+/* =========================================================
+   RAIL
+========================================================= */
 
 main{
   padding:0 22px 18px;
@@ -351,13 +253,21 @@ main{
   top:0;
   bottom:0;
   width:10px;
-  background:var(--accent,#c7d2fe);
+  background:linear-gradient(180deg,#c7d2fe,#a5b4fc);
 }
 
 .railViewport{
   border-radius:16px;
   border:1px solid var(--line);
-  background:linear-gradient(180deg,var(--railA),var(--railB));
+  background:
+    linear-gradient(180deg,var(--railA),var(--railB)),
+    repeating-linear-gradient(
+      to right,
+      rgba(0,0,0,.02) 0px,
+      rgba(0,0,0,.02) 1px,
+      transparent 1px,
+      transparent 80px
+    );
   overflow-x:auto;
   overflow-y:hidden;
 }
@@ -378,6 +288,7 @@ main{
 .tickText{
   font-size:15px;
   font-weight:950;
+  fill:#334155;
 }
 
 .yearText{
@@ -388,12 +299,13 @@ main{
 .dot{
   stroke:#fff;
   stroke-width:2;
-  transition:.15s;
+  transition:.2s;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.25));
 }
 
 .dot:hover{
   r:11;
-  filter:brightness(1.1);
+  filter:brightness(1.1) drop-shadow(0 6px 14px rgba(0,0,0,.35));
 }
 
 .label{
@@ -403,16 +315,19 @@ main{
   paint-order:stroke;
   stroke:#fff;
   stroke-width:5px;
+  text-shadow:0 2px 6px rgba(0,0,0,.25);
 }
 
 .userLine{
   stroke:var(--userLine);
-  stroke-width:4;
-  stroke-dasharray:8 6;
-  opacity:.95;
+  stroke-width:5;
+  stroke-dasharray:10 6;
+  filter:drop-shadow(0 0 6px rgba(239,68,68,.6));
 }
 
-/* ================= TABLE ================= */
+/* =========================================================
+   TABLE
+========================================================= */
 
 .tableCard{
   margin:0 22px 24px;
@@ -442,18 +357,39 @@ thead th{
   padding:12px;
   font-weight:950;
   border-bottom:1px solid var(--line);
+  border-right:1px solid var(--lineSoft);
+  cursor:pointer;
+  transition:.2s;
+}
+
+thead th:last-child{border-right:none}
+
+thead th:hover{
+  background:#e2e8f0;
 }
 
 tbody td{
   padding:12px;
-  border-bottom:1px solid rgba(15,23,42,.06);
+  border-bottom:1px solid var(--lineSoft);
+  border-right:1px solid var(--lineSoft);
 }
 
-tbody tr:hover{
+tbody td:last-child{border-right:none}
+
+tbody tr:nth-child(even){
   background:#f8fafc;
 }
 
-/* ================= TOOLTIP ================= */
+tbody tr:hover{
+  background:#e0f2fe;
+}
+
+th.sort-asc::after{content:" ▲"}
+th.sort-desc::after{content:" ▼"}
+
+/* =========================================================
+   TOOLTIP
+========================================================= */
 
 .tooltip{
   position:fixed;
@@ -464,25 +400,14 @@ tbody tr:hover{
   border-radius:12px;
   font-size:14px;
   font-weight:950;
-  box-shadow:0 16px 40px rgba(0,0,0,.25);
+  box-shadow:var(--shadowDeep);
   max-width:min(420px,86vw);
   display:none;
 }
 
-/* ================= FATAL ================= */
-
-.fatal{
-  margin:14px 22px;
-  padding:14px 16px;
-  border-radius:14px;
-  border:1px solid rgba(220,38,38,.25);
-  background:rgba(220,38,38,.06);
-  color:#7f1d1d;
-  font-weight:950;
-  white-space:pre-wrap;
-}
-
-/* ================= RESPONSIVE ================= */
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media (max-width:1100px){
   .brand .title{font-size:32px}
