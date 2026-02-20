@@ -1,173 +1,105 @@
-* { box-sizing: border-box; }
 body {
+  font-family: Pretendard, sans-serif;
   margin: 0;
-  font-family: "Pretendard", sans-serif;
-  background: #f4f6fb;
-  color: #111;
+  background: #f5f5f7;
 }
 
-.header {
-  background: #ffffff;
-  border-bottom: 4px solid #111;
-}
-.header-inner {
-  max-width: 1400px;
-  margin: auto;
-  padding: 50px 20px 40px;
+header {
   text-align: center;
+  padding: 40px 20px 25px;
+  background: #ffffff;
+  border-bottom: 1px solid #ddd;
 }
-.header h1 {
-  font-size: 42px;
+
+h1 {
+  font-size: 36px;
   font-weight: 900;
 }
-.copyright {
+
+.sub {
   font-weight: 800;
   margin-top: 8px;
 }
+
 .desc {
-  font-size: 14px;
-  margin-top: 10px;
+  font-size: 13px;
+  margin-top: 8px;
   color: #555;
 }
 
-.dashboard {
-  max-width: 1400px;
-  margin: auto;
-  padding: 30px;
-}
-
-/* KPI */
-.kpi-section {
-  background: #fff;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-  margin-bottom: 30px;
-}
-.kpi-input {
-  text-align: center;
-  margin-bottom: 20px;
-}
-.kpi-input input {
-  padding: 12px 18px;
-  font-size: 18px;
-  border: 2px solid #111;
-  border-radius: 10px;
-  width: 260px;
-}
-.kpi-cards {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.kpi {
-  flex: 1;
-  min-width: 250px;
-  padding: 30px;
-  border-radius: 16px;
-  color: #fff;
-  text-align: center;
-  transition: 0.3s;
-}
-.kpi-title {
-  font-size: 18px;
-  font-weight: 700;
-}
-.kpi-value {
-  font-size: 48px;
-  font-weight: 900;
-  margin: 10px 0;
-}
-.kpi-sub {
-  font-size: 14px;
-}
-.blue { background: #2563eb; }
-.green { background: #059669; }
-.purple { background: linear-gradient(135deg,#6d28d9,#9333ea); }
-
-/* Filter */
-.filter-section {
+.top-filter {
   background: #fff;
   padding: 20px;
-  border-radius: 16px;
-  margin-bottom: 30px;
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
-}
-.filter-left select,
-.filter-left button {
-  padding: 10px 14px;
-  font-size: 14px;
-  margin-right: 10px;
-}
-.type-cards {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.type-card {
-  background: #111;
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.type-card span {
-  cursor: pointer;
-  font-weight: 900;
-}
-
-/* Analysis */
-.analysis-section {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
   gap: 30px;
-  margin-bottom: 30px;
-}
-.box-area,
-.summary-area {
-  background: #fff;
-  padding: 25px;
-  border-radius: 16px;
-}
-svg {
-  width: 100%;
-  height: 420px;
-}
-.summary-area div {
-  font-size: 18px;
-  margin: 12px 0;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #ddd;
 }
 
-/* Table */
-.table-section {
-  background: #fff;
-  padding: 25px;
-  border-radius: 16px;
+.slider-box label {
+  font-size: 12px;
+  font-weight: 700;
 }
-table {
-  width: 100%;
-  border-collapse: collapse;
+
+#gradeSlider {
+  width: 200px;
 }
-th, td {
-  padding: 10px;
+
+#gradeValue {
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.convert-box {
+  display: flex;
+  gap: 15px;
+}
+
+.convert-card {
+  padding: 12px 18px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 13px;
   text-align: center;
 }
-th {
-  background: #111;
-  color: #fff;
-}
-tr:hover td {
-  background: #f0f0f0;
+
+.convert-card strong {
+  display: block;
+  font-size: 20px;
+  margin-top: 4px;
 }
 
-/* Responsive */
-@media (max-width: 1000px) {
-  .analysis-section {
-    grid-template-columns: 1fr;
-  }
+.blue { background: #2563eb; }
+.green { background: #16a34a; }
+.purple { background: linear-gradient(135deg,#6d28d9,#9333ea); }
+
+.univ-box label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.univ-box select {
+  padding: 6px 10px;
+  font-size: 14px;
+}
+
+.rail-wrapper {
+  overflow-x: auto;
+  padding: 30px 0;
+}
+
+svg {
+  min-width: 1400px;
+}
+
+.tooltip {
+  position: absolute;
+  background: #111;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  pointer-events: none;
 }
