@@ -1,95 +1,60 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>모두의 2028대입을 위한 등급 변환기</title>
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="./style.css" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>모두의 2028대입을 위한 등급 변환기</title>
+<link rel="stylesheet" href="./style.css"/>
 </head>
 <body>
-  <header class="top">
-    <div class="brand">
-      <div class="title">모두의 2028대입을 위한 등급 변환기</div>
-      <div class="sub">Copyright@All Teachers</div>
-      <div class="desc">
-        50:50 통합 등급은 <b>(부산 9등급 + 대진대 9등급) / 2</b> 평균입니다.<br/>
-        데이터 출처: 어디가 3개년 입결 · 부산광역시교육청 등급 분석 자료 · 대진대학교 연구자료
+
+<header class="top">
+  <div class="brand">
+    <div class="title">모두의 2028대입을 위한 등급 변환기</div>
+    <div class="sub">Copyright@All Teachers</div>
+    <div class="desc">
+      50:50 통합 등급 = (부산 9등급 + 대진대 9등급) / 2
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <div class="ctlLabel">5등급 평균</div>
+      <div class="sliderRow">
+        <input id="gradeInput" type="number" min="1" max="5" step="0.01" value="3.00"/>
+        <input id="gradeSlider" type="range" min="1" max="5" step="0.01" value="3.00"/>
       </div>
     </div>
 
-    <div class="controls">
-      <div class="ctl">
-        <div class="ctlLabel">5등급 평균</div>
-        <div class="sliderRow">
-          <input id="gradeInput" type="number" min="1" max="5" step="0.01" value="3.00" />
-          <input id="gradeSlider" type="range" min="1" max="5" step="0.01" value="3.00" />
-        </div>
-      </div>
-
-      <div class="ctl">
-        <div class="ctlLabel">대학 선택</div>
-        <select id="collegeSelect"></select>
-      </div>
+    <div class="ctl">
+      <div class="ctlLabel">대학 선택</div>
+      <select id="collegeSelect"></select>
     </div>
-  </header>
+  </div>
+</header>
 
-  <section class="cards">
-    <div class="card cBusan">
-      <div class="cardTitle">부산 9등급</div>
-      <div class="cardValue" id="busanVal">-</div>
-    </div>
-    <div class="card cDaejin">
-      <div class="cardTitle">대진대 9등급</div>
-      <div class="cardValue" id="daejinVal">-</div>
-    </div>
-    <div class="card cMix">
-      <div class="cardTitle">50:50 통합</div>
-      <div class="cardValue" id="mixVal">-</div>
-    </div>
-  </section>
+<section class="cards">
+  <div class="card cBusan">
+    <div class="cardTitle">부산 9등급</div>
+    <div class="cardValue" id="busanVal">-</div>
+  </div>
+  <div class="card cDaejin">
+    <div class="cardTitle">대진대 9등급</div>
+    <div class="cardValue" id="daejinVal">-</div>
+  </div>
+  <div class="card cMix">
+    <div class="cardTitle">50:50 통합</div>
+    <div class="cardValue" id="mixVal">-</div>
+  </div>
+</section>
 
-  <section class="hero">
-    <div class="heroTitle" id="heroTitle"></div>
-    <div class="heroDesc" id="heroDesc"></div>
-    <div class="legend">
-      <span class="y2023">● 2023</span>
-      <span class="y2024">● 2024</span>
-      <span class="y2025">● 2025</span>
-      <span class="redline">│ 사용자 등급</span>
-    </div>
-  </section>
+<section class="hero">
+  <div class="heroTitle" id="heroTitle"></div>
+  <div class="heroDesc" id="heroDesc"></div>
+</section>
 
-  <main id="rails"></main>
+<main id="rails"></main>
 
-  <section class="tableWrap">
-    <div class="tableHeader">
-      <div class="tableTitle">📋 모집단위 상세 데이터</div>
-      <div class="tableHint">표시는 선택 대학 전체 전형을 합쳐 보여주며, 행은 스크롤됩니다.</div>
-    </div>
-    <div class="tableViewport">
-      <table id="dataTable">
-        <thead>
-          <tr>
-            <th>연도</th>
-            <th>중심전형</th>
-            <th>전형명</th>
-            <th>모집단위</th>
-            <th>모집인원</th>
-            <th>경쟁률</th>
-            <th>충원순위</th>
-            <th>50%cut</th>
-            <th>70%cut</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
-
-  <div id="tooltip" class="tooltip" aria-hidden="true"></div>
-
-  <!-- ✅ 반드시 app.js 로 -->
-  <script src="./app.js"></script>
+<script src="./app.js"></script>
 </body>
 </html>
