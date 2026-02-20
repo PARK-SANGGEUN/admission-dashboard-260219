@@ -1,57 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>모두의 2028대입을 위한 등급 변환기</title>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>모두의 입시 레일</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<header>
-  <h1>모두의 2028대입을 위한 등급 변환기</h1>
-  <div class="sub">Copyright@All Teachers</div>
-  <div class="desc">
-    50:50 통합 등급 = (부산 9등급 + 대진대 9등급) ÷ 2<br>
-    데이터 출처: 어디가 3개년 입결 · 부산광역시교육청 등급 분석 자료 · 대진대학교 연구자료
+<header class="top">
+  <div class="brand">
+    <div class="title">모두의 입시 레일</div>
+    <div class="sub">Copyright@All Teachers</div>
+  </div>
+
+  <div class="controls">
+    <label class="ctl">
+      <span>5등급 평균</span>
+      <input type="range" id="gradeSlider" min="1" max="5" step="0.01" value="3">
+      <div id="gradeValue">3.00</div>
+    </label>
+
+    <label class="ctl">
+      <span>대학 선택</span>
+      <select id="collegeSelect"></select>
+    </label>
   </div>
 </header>
 
-<div class="top-filter">
-
-  <div class="slider-box">
-    <label>5등급 평균</label>
-    <input type="range" id="gradeSlider" min="1" max="5" step="0.01" value="3">
-    <div id="gradeValue">3.00</div>
+<section class="hero">
+  <div class="heroTitle" id="heroTitle"></div>
+  <div class="heroDesc" id="heroDesc"></div>
+  <div class="legend">
+    <span class="y2024">● 2024</span>
+    <span class="y2025">● 2025</span>
+    <span class="y2026">● 2026</span>
   </div>
+</section>
 
-  <div class="convert-box">
-    <div class="convert-card blue">
-      부산 9등급
-      <strong id="busanValue">-</strong>
-    </div>
-    <div class="convert-card green">
-      대진대 9등급
-      <strong id="daejinValue">-</strong>
-    </div>
-    <div class="convert-card purple">
-      50:50 통합
-      <strong id="mixValue">-</strong>
-    </div>
-  </div>
+<main id="rails"></main>
 
-  <div class="univ-box">
-    <label>대학 선택</label>
-    <select id="univSelect"></select>
-  </div>
+<footer class="footer">
+  출처 : 서울특별시교육청교육연구정보원 2027 대입정보제공 교원대상 설명회
+</footer>
 
-</div>
+<div id="tooltip" class="tooltip"></div>
 
-<div class="rail-wrapper">
-  <div id="railContainer"></div>
-</div>
-
-<script src="app.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
