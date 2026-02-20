@@ -1,6 +1,6 @@
 /* ================= 기본 ================= */
 
-const YEARS = [2023,2024,2025];
+const YEARS = [2025, 2024, 2023];
 let ADMISSION = [];
 let CONVERT = [];
 let currentCollege = "";
@@ -62,14 +62,17 @@ async function loadJSON(url){
 
 (async function init(){
 
-  for(const y of [2025,2024,2023]){
+  for(const y of YEARS){
     const d = await loadJSON(`data/admission_${y}.json`);
+    
+    // 🔥 year 강제 주입
+    d.forEach(row => row.year = y);
+
     ADMISSION.push(...d);
   }
 
   CONVERT = await loadJSON("data/convert.json");
 
-  // 🔥 대학명 필드: "대학명"
   const colleges = [...new Set(ADMISSION.map(r=>r["대학명"]))];
   collegeSelect.innerHTML = colleges.map(c=>`<option>${c}</option>`).join("");
 
@@ -77,7 +80,7 @@ async function loadJSON(url){
 
   collegeSelect.addEventListener("change",()=>{
     currentCollege = collegeSelect.value;
-    renderTable();
+    renderAll();
   });
 
   g5Slider.addEventListener("input",()=>{
@@ -93,9 +96,16 @@ async function loadJSON(url){
   });
 
   updateCards();
-  renderTable();
+  renderAll();
 
 })();
+
+/* ================= 전체 렌더 ================= */
+
+function renderAll(){
+  renderTable();
+  renderRails();
+}
 
 /* ================= 테이블 ================= */
 
@@ -103,18 +113,20 @@ function renderTable(){
 
   tableBody.innerHTML = "";
 
-  const rows = ADMISSION.filter(r=>r["대학명"]===currentCollege);
+  const rows = ADMISSION
+    .filter(r=>r["대학명"]===currentCollege)
+    .sort((a,b)=>b.year - a.year); // 🔥 연도 내림차순
 
   rows.forEach(r=>{
-
-    const tr = document.createElement("tr");
 
     const cut50 = r["50%cut"];
     const cut70 = r["70%cut"];
     const 표시값 = cut70 || cut50;
 
+    const tr = document.createElement("tr");
+
     tr.innerHTML = `
-      <td>${r["연도"]}</td>
+      <td>${r.year}</td>
       <td>${r["중심전형"]}</td>
       <td>${r["전형명"]}</td>
       <td>${r["모집단위"]}</td>
@@ -127,5 +139,48 @@ function renderTable(){
     `;
 
     tableBody.appendChild(tr);
+  });
+}
+
+/* ================= 레일 ================= */
+
+function renderRails(){
+
+  railsEl.innerHTML = "";
+
+  const rows = ADMISSION.filter(r=>r["대학명"]===currentCollege);
+
+  if(!rows.length) return;
+
+  const groups = {};
+
+  rows.forEach(r=>{
+    const key = r["중심전형"];
+    if(!groups[key]) groups[key] = [];
+    groups[key].push(r);
+  });
+
+  Object.keys(groups).forEach(groupName=>{
+
+    const card = document.createElement("div");
+    card.className = "railCard";
+    card.innerHTML = `
+      <div class="railHeader">
+        <div class="railTitle">${groupName}</div>
+      </div>
+      <div class="railBody"></div>
+    `;
+
+    const body = card.querySelector(".railBody");
+
+    groups[groupName].forEach(r=>{
+      const cut = r["70%cut"] || r["50%cut"];
+      const div = document.createElement("div");
+      div.style.margin = "4px 0";
+      div.innerHTML = `<b>${r.year}</b> - ${r["모집단위"]} : ${fmt(cut)}`;
+      body.appendChild(div);
+    });
+
+    railsEl.appendChild(card);
   });
 }
