@@ -7,35 +7,58 @@
   <link rel="icon" href="data:," />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+
+  <!-- ================= HEADER ================= -->
   <header class="top">
     <div class="brand">
       <div class="title">모두의 2028대입을 위한 등급 변환기</div>
       <div class="sub">Copyright@All Teachers</div>
+
       <div class="note">
         <div class="noteLine">50:50 통합 등급 = (부산 9등급 + 대진대 9등급) / 2</div>
         <div class="noteLine">데이터 출처: 어디가 3개년 입결 · 부산광역시교육청 등급 분석 자료 · 대진대학교 연구자료</div>
       </div>
     </div>
 
+    <!-- ===== 컨트롤 영역 ===== -->
     <div class="controls">
+
+      <!-- 5등급 입력 -->
       <div class="ctlBox">
-        <div class="ctlTitle">5등급 평균</div>
+        <div class="ctlTitle">5등급 평균 입력</div>
         <div class="sliderRow">
-          <input id="g5Slider" type="range" min="1" max="5" step="0.01" value="3.00" />
+          <input 
+            id="g5Slider" 
+            type="range" 
+            min="1" 
+            max="5" 
+            step="0.01" 
+            value="3.00" 
+          />
           <div class="g5Val">
-            <input id="g5Input" type="number" min="1" max="5" step="0.01" value="3.00" />
+            <input 
+              id="g5Input" 
+              type="number" 
+              min="1" 
+              max="5" 
+              step="0.01" 
+              value="3.00" 
+            />
           </div>
         </div>
       </div>
 
+      <!-- 대학 선택 -->
       <div class="ctlBox">
         <div class="ctlTitle">대학 선택</div>
         <select id="collegeSelect"></select>
       </div>
 
+      <!-- 전형 비교 -->
       <div class="ctlBox">
-        <div class="ctlTitle">전형 비교(최대 3개)</div>
+        <div class="ctlTitle">전형 비교 (최대 3개)</div>
         <div class="compareRow">
           <select id="typeSelect"></select>
           <button id="addTypeBtn" class="btn">추가</button>
@@ -43,25 +66,32 @@
         </div>
         <div id="chips" class="chips"></div>
       </div>
+
     </div>
   </header>
 
+  <!-- ================= 변환 카드 ================= -->
   <section class="cardsWrap">
     <div class="gradeCards">
+
       <div class="gcard busan">
         <div class="glabel">부산 9등급</div>
         <div class="gval" id="busanVal">-</div>
       </div>
+
       <div class="gcard daejin">
         <div class="glabel">대진대 9등급</div>
         <div class="gval" id="daejinVal">-</div>
       </div>
+
       <div class="gcard mix">
         <div class="glabel">50:50 통합</div>
         <div class="gval" id="mixVal">-</div>
       </div>
+
     </div>
 
+    <!-- 모드 선택 -->
     <div class="modeBar" role="tablist" aria-label="표시 등급 모드">
       <button class="modeBtn active" data-mode="mix">50:50 통합</button>
       <button class="modeBtn" data-mode="busan">부산 9등급</button>
@@ -69,9 +99,11 @@
     </div>
   </section>
 
+  <!-- ================= HERO ================= -->
   <section class="hero">
     <div class="heroTitle" id="heroTitle"></div>
     <div class="heroDesc" id="heroDesc"></div>
+
     <div class="legend">
       <span class="y2023">● 2023</span>
       <span class="y2024">● 2024</span>
@@ -80,13 +112,19 @@
     </div>
   </section>
 
+  <!-- ================= 레일 ================= -->
   <main id="rails"></main>
 
+  <!-- ================= 데이터 테이블 ================= -->
   <section class="tableCard">
+
     <div class="tableHeader">
       <div class="tableTitle">📋 모집단위 상세 데이터</div>
-      <div class="tableHint">선택 대학 기준(전형 필터 적용). 표는 가로 스크롤됩니다.</div>
+      <div class="tableHint">
+        선택 대학 기준 (전형 필터 적용). 표는 가로 스크롤됩니다.
+      </div>
     </div>
+
     <div class="tableWrap">
       <table id="dataTable">
         <thead>
@@ -106,16 +144,23 @@
         <tbody></tbody>
       </table>
     </div>
+
   </section>
 
+  <!-- ================= FOOTER ================= -->
   <footer class="footer">
-    ※ 표시값은 70%컷 우선, 없으면 50%컷을 사용합니다. 라벨은 상·중·하 각 3개 고정(겹침 최소화), 나머지는 마우스오버로 확인.
+    ※ 표시값은 70%컷 우선, 없으면 50%컷을 사용합니다.  
+    라벨은 상·중·하 각 3개 고정(겹침 최소화), 나머지는 마우스오버로 확인.
   </footer>
 
+  <!-- ================= Tooltip ================= -->
   <div id="tooltip" class="tooltip" aria-hidden="true"></div>
 
+  <!-- ================= Fatal Error Box ================= -->
   <div id="fatal" class="fatal" hidden></div>
 
+  <!-- ================= Script ================= -->
   <script src="app.js"></script>
+
 </body>
 </html>
