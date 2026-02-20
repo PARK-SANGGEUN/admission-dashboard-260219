@@ -137,10 +137,18 @@ function hideFatal(){
 
     // ⭐ 여기 경로가 핵심입니다.
     // repo 루트 기준: /data/admission.json, /data/convert.json
-    [ADMISSION, CONVERT] = await Promise.all([
-      loadJSON("data/admission.json"),
-      loadJSON("data/convert.json"),
-    ]);
+    // 🔥 3개년 분리 로딩 방식
+const admissionPromises = [
+  loadJSON("data/admission_2025.json"),
+  loadJSON("data/admission_2024.json"),
+  loadJSON("data/admission_2023.json")
+];
+
+const admissionData = await Promise.all(admissionPromises);
+ADMISSION = admissionData.flat();
+
+// convert는 그대로
+CONVERT = await loadJSON("data/convert.json");
 
     if(!Array.isArray(ADMISSION)) throw new Error("admission.json 형식이 배열(list of rows)이어야 합니다.");
     if(!Array.isArray(CONVERT)) throw new Error("convert.json 형식이 배열(list of rows)이어야 합니다.");
